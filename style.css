@@ -1,0 +1,233 @@
+* {
+  box-sizing: border-box;
+  font-family: "VT323", monospace;
+  color: black;
+}
+body {
+  margin: 0;
+  padding-bottom: 3rem;
+  background-color: rgb(237, 199, 49);
+}
+/* Chatroom page styles */
+#chatroomContainer {
+  display: grid;
+  grid-row: 5vh auto 5rem;
+}
+#chatroomNavbar {
+  background-color: rgb(189, 155, 19);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: sticky;
+  padding: 2px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  transition: 0.2s;
+}
+#chatroomNavbar:hover {
+  background-color: rgb(151, 124, 15);
+}
+#returnToHomePage {
+  background-image: url("/icons/yellow-bird.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 100%;
+  width: 43px;
+  transition: 0.2s;
+}
+#returnToHomePage:hover {
+  height: 110%;
+}
+#listOfParticipants {
+  background-image: url("/icons/user-list.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  width: 43px;
+  height: 100%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+#listOfParticipants:hover {
+  height: 110%;
+}
+#loggedIn {
+  flex-grow: 2;
+  font-size: 1.2rem;
+}
+#youAreLoggedInAs {
+  text-decoration: underline;
+}
+#logout {
+  background-image: url("/icons/logout.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  width: 43px;
+  height: 100%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+#logout:hover {
+  height: 110%;
+}
+#chatForm {
+  background-color: rgba(255, 255, 255, 0.263);
+  padding: 0.5rem 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 70px;
+  column-gap: 20px;
+}
+#chatInput {
+  font-size: 2rem;
+  border-width: 0 0 3px 0;
+  border-bottom: 3px solid;
+  background-color: transparent;
+  flex-grow: 1;
+  border-radius: 3px;
+}
+#chatInput:focus {
+  outline: none;
+}
+#sendButton {
+  background-color: rgb(191, 156, 16, 0.5);
+  border: none;
+  width: 20%;
+  border-radius: 10px;
+  font-size: 2.5rem;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#sendButton:hover {
+  background-color: rgba(191, 156, 16);
+}
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: calc(100vh - 40px - 70px);
+  /* (100vh - loginNavbar's height and chatForm's height) */
+  overflow: auto;
+}
+li {
+  font-size: 1.5rem;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  margin: 0.3rem;
+}
+.ownMessage {
+  background-color: rgba(191, 156, 16, 0.304);
+}
+.othersMessage {
+  background-color: rgba(191, 156, 16, 0.762);
+  text-align: right;
+}
+.joinedAndLeftMessage {
+  text-align: center;
+  width: 50%;
+  margin: 0.5rem auto;
+  border-radius: 2rem;
+}
+#userJoinedMessage {
+  color: darkgreen;
+  background-color: rgba(0, 100, 0, 0.3);
+}
+#userLeftMessage {
+  background-color: rgba(139, 0, 0, 0.3);
+  color: darkred;
+}
+time {
+  display: block;
+  text-align: right;
+  font-size: 1.2rem;
+  color: rgb(129, 104, 8);
+}
+
+/* Login page styles */
+#invalidUsernameOrPassword {
+  color: red;
+  font-size: 1.5rem;
+}
+#usernameTaken {
+  color: rgb(110, 98, 98);
+  font-size: 1.5rem;
+}
+#loginBoxContainer {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(127, 107, 28);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#loginBox {
+  background-image: url("/icons/yellow-bird.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-position: center center;
+  background-color: rgb(237, 199, 49);
+  border-radius: 10px;
+  height: 50%;
+  width: 50%;
+  border: 5px solid rgb(191, 156, 16);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  overflow-x: auto;
+}
+#yellowchat {
+  color: rgb(146, 119, 11);
+  margin: 0;
+}
+
+.loginInput {
+  text-align: center;
+  border-width: 0 0 3px 0;
+  border-bottom: 3px solid;
+  background-color: transparent;
+  display: block;
+  font-size: 2rem;
+  margin: 0 auto 1rem auto;
+  width: 70%;
+  height: 3rem;
+}
+.loginInput:focus {
+  outline: none;
+}
+.loginFormStyle {
+  font-size: 2rem;
+}
+.loginButton {
+  cursor: pointer;
+  padding: 1rem;
+  font-size: 2rem;
+  border-radius: 10px;
+  background-color: rgb(191, 156, 16, 0.5);
+  border: none;
+  box-shadow: 5px 5px rgb(144, 118, 12);
+  transition: 0.3s background-color;
+}
+.loginButton:active {
+  box-shadow: none;
+  transform: translate(5px, 5px);
+}
+.loginButton:hover {
+  background-color: rgb(191, 156, 16);
+}
+
+.createAnAccount {
+  text-decoration: none;
+  display: block;
+  font-size: 1.5rem;
+}
+.createAnAccount:hover {
+  text-decoration: underline;
+}

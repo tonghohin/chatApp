@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YellowChat</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="shortcut icon" href="yellow-bird.svg" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <section id="chatroomContainer">
+      <nav id="chatroomNavbar">
+        <a href="/logout" id="returnToHomePage" title="Login page"></a>
+        <div id="listOfParticipants" title="See who's here!"></div>
+        <span id="loggedIn">You are logged in as <span id="youAreLoggedInAs"></span></span>
+        <a href="/logout" id="logout" title="Logout"></a>
+      </nav>
+
+      <ul id="messages"></ul>
+
+      <form id="chatForm">
+        <input id="chatInput" autocomplete="off" type="text" autofocus />
+        <button type="submit" id="sendButton">Send</button>
+      </form>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/chatroom/chatroom.js"></script>
+  </body>
+</html>

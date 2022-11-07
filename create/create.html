@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YellowChat</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="shortcut icon" href="yellow-bird.svg" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <section id="loginBoxContainer">
+      <div id="loginBox">
+        <h1 id="yellowchat">Welcome to YellowChat</h1>
+        <form class="loginFormStyle" id="createAccountForm" action="/create-account" method="POST">
+          Create username<input type="text" name="createUsername" id="createUsername" class="loginInput" autofocus required />
+          Create password
+          <input type="text" name="createPassword" id="createPassword" class="loginInput" required />
+          <p id="usernameTaken">The username has been taken. Please choose another one.</p>
+          <button type="submit" class="loginButton">Create account</button>
+        </form>
+        <a href="/login/login.html" class="createAnAccount">Already have an account? Login now!</a>
+      </div>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/create/create.js"></script>
+  </body>
+</html>
