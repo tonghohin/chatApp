@@ -1,19 +1,10 @@
-function findSocketID(arr, socketID) {
-  return arr.findIndex((value) => value.socketID === socketID);
-}
-
-function findUsername(arr, socketID) {
-  return arr[arr.findIndex((value) => value.socketID === socketID)].username;
-}
-
-const currentUserList = [];
-
 const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -21,7 +12,7 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 const { use } = require("passport");
 
-// Connect MySQL database
+// Connect to MySQL database
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -46,7 +37,9 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+let USERNAME;
 passport.serializeUser((user, done) => {
+  USERNAME = user[0].username;
   done(null, user[0].user_id);
 });
 
@@ -92,12 +85,15 @@ function loggedOut(req, res, next) {
   res.redirect("/");
 }
 
+app.get("/getusername", (req, res) => {
+  res.json(USERNAME);
+});
+
 app.get("/", loggedIn, (req, res) => {
   connection.query("SELECT username FROM users WHERE user_id = ?", [req.session.passport.user], (err, result) => {
     if (err) {
       console.log(err);
     }
-    // res.sendFile(__dirname + "/chatroom/index.html");
   });
   res.sendFile(__dirname + "/chatroom/index.html");
 });
@@ -192,6 +188,8 @@ app.post("/create-account", (req, res) => {
 // });
 
 io.on("connection", (socket) => {
+  io.emit("loggedIn", USERNAME);
+
   // console.log("A USER CONNECTED:", socket.id);
   // currentUserList.push({ socketID: socket.id, username: "" });
   // console.log("CURRENT USERS:", currentUserList);
@@ -215,7 +213,7 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (msg, time) => {
     console.log(`'${msg}', AT ${time}`);
-    io.emit("chatMessage", msg, time);
+    io.emit("chatMessage", msg, time, USERNAME);
   });
 
   // socket.on("login", (usr, pwd) => {
