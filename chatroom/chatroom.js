@@ -31,19 +31,19 @@ chatForm.addEventListener("submit", (e) => {
 });
 
 let myself;
-fetch("/getusername")
-  .then((res) => res.json())
-  .then((data) => {
-    youAreLoggedInAs.innerHTML = data.USERNAME;
-    socket.emit("loggedIn", data);
-    myself = data;
-    console.log("DATAAAA", data);
-  });
+// fetch("/getusername")
+//   .then((res) => res.json())
+//   .then((data) => {
+//     youAreLoggedInAs.innerHTML = data.USERNAME;
+//     socket.emit("loggedIn", data);
+//     myself = data;
+//     console.log("DATAAAA", data);
+//   });
 
-socket.on("loggedIn", (username) => {
-  messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${username} has joined</li>`;
-  messages.scrollTop = messages.scrollHeight;
-});
+// socket.on("loggedIn", (username) => {
+//   messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${username} has joined</li>`;
+//   messages.scrollTop = messages.scrollHeight;
+// });
 
 socket.on("chatMessage", (msg, time, username) => {
   console.log(",asdk;jlvbdslkBV;JKSDBV;skj", msg, time, username);

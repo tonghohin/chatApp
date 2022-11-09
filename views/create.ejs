@@ -15,19 +15,18 @@
     <section id="loginBoxContainer">
       <div id="loginBox">
         <h1 id="yellowchat">Welcome to YellowChat</h1>
-        <form class="loginFormStyle" id="loginForm" action="/login" method="POST">
-          Username<input type="text" name="username" id="usernameLogin" class="loginInput" autofocus required autocomplete="off" />
-          Password
-          <input type="text" name="password" id="passwordLogin" class="loginInput" required autocomplete="off" />
-          <p id="invalidUsernameOrPassword">Invalid username or password</p>
-
-          <button type="submit" class="loginButton">Login</button>
+        <form class="loginFormStyle" id="createAccountForm" action="/create-account" method="POST">
+          Create username<input type="text" name="createUsername" id="createUsername" class="loginInput" autofocus required />
+          Create password
+          <input type="text" name="createPassword" id="createPassword" class="loginInput" required />
+          <p id="usernameTaken">The username has been taken. Please choose another one.</p>
+          <button type="submit" class="loginButton">Create account</button>
         </form>
-        <a href="/create/create.html" class="createAnAccount">Create an account</a>
+        <a href="/login" class="createAnAccount">Already have an account? Login now!</a>
       </div>
     </section>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/login/login.js"></script>
+    <script src="/create/create.js"></script>
   </body>
 </html>

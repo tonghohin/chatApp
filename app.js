@@ -30,6 +30,7 @@ connection.connect((err) => {
   });
 });
 
+app.set("view engine", "ejs");
 app.use(express.static(__dirname));
 app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(express.urlencoded({ extended: false }));
@@ -85,10 +86,6 @@ function loggedOut(req, res, next) {
   res.redirect("/");
 }
 
-app.get("/getusername", (req, res) => {
-  res.json(USER);
-});
-
 app.get("/", loggedIn, (req, res) => {
   USER.USERSESSIONID = req.session.id;
 
@@ -96,23 +93,16 @@ app.get("/", loggedIn, (req, res) => {
     if (err) {
       console.log(err);
     }
+    res.render("index", { username: result[0].username });
   });
-  res.redirect(`/chat/${USER.USERNAME}`);
-  // res.sendFile(__dirname + "/chatroom/index.html");
-});
-
-app.get("/chat/:username", (req, res) => {
-  console.log(req.headers.cookie);
-  console.log("params", req.params);
-  res.sendFile(__dirname + "/chatroom/index.html");
 });
 
 app.get("/login", loggedOut, (req, res) => {
-  res.sendFile(__dirname + "/login/login.html");
+  res.render("login");
 });
 
 app.get("/create", (req, res) => {
-  res.sendFile(__dirname + "/create/create.html");
+  res.render("create");
 });
 
 app.post(
@@ -216,12 +206,6 @@ io.on("connection", (socket) => {
   // });
 
   console.log("ID", USER.USERSESSIONID);
-
-  if (USER.USERSESSIONID === null) {
-    socket.on("loggedIn", (username) => {
-      io.emit("loggedIn", username);
-    });
-  }
 
   socket.on("logout", (usr) => {
     io.emit("logout", usr);
