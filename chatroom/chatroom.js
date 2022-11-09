@@ -31,15 +31,14 @@ chatForm.addEventListener("submit", (e) => {
 });
 
 let myself;
-window.addEventListener("DOMContentLoaded", () => {
-  fetch("/getusername")
-    .then((res) => res.json())
-    .then((data) => {
-      youAreLoggedInAs.innerHTML = data;
-      myself = data;
-      console.log("DATAAAA", data);
-    });
-});
+fetch("/getusername")
+  .then((res) => res.json())
+  .then((data) => {
+    youAreLoggedInAs.innerHTML = data.USERNAME;
+    socket.emit("loggedIn", data);
+    myself = data;
+    console.log("DATAAAA", data);
+  });
 
 socket.on("loggedIn", (username) => {
   messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${username} has joined</li>`;

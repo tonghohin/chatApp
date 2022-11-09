@@ -37,9 +37,9 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-let USERNAME;
+const USER = { USERNAME: null, USERSESSIONID: null };
 passport.serializeUser((user, done) => {
-  USERNAME = user[0].username;
+  USER.USERNAME = user[0].username;
   done(null, user[0].user_id);
 });
 
@@ -86,15 +86,24 @@ function loggedOut(req, res, next) {
 }
 
 app.get("/getusername", (req, res) => {
-  res.json(USERNAME);
+  res.json(USER);
 });
 
 app.get("/", loggedIn, (req, res) => {
+  USER.USERSESSIONID = req.session.id;
+
   connection.query("SELECT username FROM users WHERE user_id = ?", [req.session.passport.user], (err, result) => {
     if (err) {
       console.log(err);
     }
   });
+  res.redirect(`/chat/${USER.USERNAME}`);
+  // res.sendFile(__dirname + "/chatroom/index.html");
+});
+
+app.get("/chat/:username", (req, res) => {
+  console.log(req.headers.cookie);
+  console.log("params", req.params);
   res.sendFile(__dirname + "/chatroom/index.html");
 });
 
@@ -188,9 +197,8 @@ app.post("/create-account", (req, res) => {
 // });
 
 io.on("connection", (socket) => {
-  io.emit("loggedIn", USERNAME);
+  console.log("A USER CONNECTED:", socket.id);
 
-  // console.log("A USER CONNECTED:", socket.id);
   // currentUserList.push({ socketID: socket.id, username: "" });
   // console.log("CURRENT USERS:", currentUserList);
 
@@ -207,13 +215,21 @@ io.on("connection", (socket) => {
   //   console.log(usr, "LEFT!!!!!!!!!");
   // });
 
+  console.log("ID", USER.USERSESSIONID);
+
+  if (USER.USERSESSIONID === null) {
+    socket.on("loggedIn", (username) => {
+      io.emit("loggedIn", username);
+    });
+  }
+
   socket.on("logout", (usr) => {
     io.emit("logout", usr);
   });
 
   socket.on("chatMessage", (msg, time) => {
     console.log(`'${msg}', AT ${time}`);
-    io.emit("chatMessage", msg, time, USERNAME);
+    io.emit("chatMessage", msg, time, USER.USERNAME);
   });
 
   // socket.on("login", (usr, pwd) => {
