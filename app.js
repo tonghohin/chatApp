@@ -11,6 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 const { use } = require("passport");
+const sessionMiddleware = session({ secret: "secret", resave: false, saveUninitialized: true });
 
 // Connect to MySQL database
 const connection = mysql.createConnection({
@@ -26,21 +27,22 @@ connection.connect((err) => {
   }
   console.log("CONNECTED TO MYSQL SERVER");
   connection.query("SELECT * FROM users", (err, result) => {
-    console.log("RESULT", result);
+    console.log("DATABASE RESULT", result);
   });
 });
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname));
-app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
+app.use(sessionMiddleware);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-const USER = { USERNAME: null, USERSESSIONID: null };
+const CURRENT_USERS = [];
+
 passport.serializeUser((user, done) => {
-  USER.USERNAME = user[0].username;
+  CURRENT_USERS.push({ USER_ID: user[0].user_id, USERNAME: user[0].username });
   done(null, user[0].user_id);
 });
 
@@ -87,8 +89,6 @@ function loggedOut(req, res, next) {
 }
 
 app.get("/", loggedIn, (req, res) => {
-  USER.USERSESSIONID = req.session.id;
-
   connection.query("SELECT username FROM users WHERE user_id = ?", [req.session.passport.user], (err, result) => {
     if (err) {
       console.log(err);
@@ -98,11 +98,11 @@ app.get("/", loggedIn, (req, res) => {
 });
 
 app.get("/login", loggedOut, (req, res) => {
-  res.render("login");
+  res.render("login", { error: req.query.error });
 });
 
 app.get("/create", (req, res) => {
-  res.render("create");
+  res.render("create", { error: req.query.error });
 });
 
 app.post(
@@ -154,7 +154,7 @@ app.post("/create-account", (req, res) => {
       res.redirect("/login");
     } else {
       console.log("Username exists!!!");
-      res.redirect("/create-account?error=true");
+      res.redirect("/create?error=true");
     }
   });
 });
@@ -186,9 +186,21 @@ app.post("/create-account", (req, res) => {
 //   const { username, password } = req.body;
 // });
 
-io.on("connection", (socket) => {
-  console.log("A USER CONNECTED:", socket.id);
+const wrap = (middleware) => (socket, next) => middleware(socket.request, {}, next);
 
+io.use(wrap(sessionMiddleware));
+io.use(wrap(passport.initialize()));
+io.use(wrap(passport.session()));
+
+io.use((socket, next) => {
+  if (socket.request.user) {
+    next();
+  } else {
+    next(new Error("unauthorized"));
+  }
+});
+
+io.on("connection", (socket) => {
   // currentUserList.push({ socketID: socket.id, username: "" });
   // console.log("CURRENT USERS:", currentUserList);
 
@@ -205,7 +217,7 @@ io.on("connection", (socket) => {
   //   console.log(usr, "LEFT!!!!!!!!!");
   // });
 
-  console.log("ID", USER.USERSESSIONID);
+  socket.emit("loggedIn", getUserName(socket.request.session.passport.user));
 
   socket.on("logout", (usr) => {
     io.emit("logout", usr);
@@ -213,7 +225,7 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (msg, time) => {
     console.log(`'${msg}', AT ${time}`);
-    io.emit("chatMessage", msg, time, USER.USERNAME);
+    socket.broadcast.emit("chatMessage", msg, time, getUserName(socket.request.session.passport.user));
   });
 
   // socket.on("login", (usr, pwd) => {
@@ -258,3 +270,11 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT || 3000, () => {
   console.log("SERVER LISTENING!");
 });
+
+function getUserName(id) {
+  for (const userPacket of CURRENT_USERS) {
+    if (userPacket.USER_ID === id) {
+      return userPacket.USERNAME;
+    }
+  }
+}

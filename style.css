@@ -1,12 +1,20 @@
+:root {
+  --dark-blue: rgb(17, 17, 26);
+  --medium-blue: rgb(22, 28, 36);
+  --light-blue: rgb(27, 43, 64);
+  --red: rgb(231, 51, 51);
+  --grey: rgb(104, 119, 138);
+}
+
 * {
   box-sizing: border-box;
-  font-family: "VT323", monospace;
-  color: black;
+  font-family: "Montserrat", monospace;
+  color: white;
 }
 body {
   margin: 0;
   padding-bottom: 3rem;
-  background-color: rgb(237, 199, 49);
+  background-color: var(--dark-blue);
 }
 /* Chatroom page styles */
 #chatroomContainer {
@@ -14,9 +22,9 @@ body {
   grid-row: 5vh auto 5rem;
 }
 #chatroomNavbar {
-  background-color: rgb(189, 155, 19);
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  background-color: var(--medium-blue);
+  border-bottom: 1px solid var(--light-blue);
+  box-shadow: 0px 2px 5px var(--light-blue);
   position: sticky;
   padding: 2px;
   height: 40px;
@@ -24,20 +32,10 @@ body {
   align-items: center;
   justify-content: space-around;
   transition: 0.2s;
+  font-weight: 400;
 }
 #chatroomNavbar:hover {
-  background-color: rgb(151, 124, 15);
-}
-#returnToHomePage {
-  background-image: url("/icons/yellow-bird.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  height: 100%;
-  width: 43px;
-  transition: 0.2s;
-}
-#returnToHomePage:hover {
-  height: 110%;
+  background-color: var(--light-blue);
 }
 #listOfParticipants {
   background-image: url("/icons/user-list.svg");
@@ -54,9 +52,10 @@ body {
 }
 #loggedIn {
   flex-grow: 2;
-  font-size: 1.2rem;
+  color: var(--grey);
 }
 #youAreLoggedInAs {
+  color: var(--grey);
   text-decoration: underline;
 }
 #logout {
@@ -73,7 +72,6 @@ body {
   height: 110%;
 }
 #chatForm {
-  background-color: rgba(255, 255, 255, 0.263);
   padding: 0.5rem 1rem;
   position: fixed;
   bottom: 0;
@@ -84,55 +82,57 @@ body {
   column-gap: 20px;
 }
 #chatInput {
-  font-size: 2rem;
-  border-width: 0 0 3px 0;
-  border-bottom: 3px solid;
-  background-color: transparent;
+  font-size: 1.3rem;
+  font-weight: 200;
+  padding-left: 10px;
+  border: none;
+  background-color: var(--medium-blue);
   flex-grow: 1;
-  border-radius: 3px;
 }
 #chatInput:focus {
   outline: none;
 }
 #sendButton {
-  background-color: rgb(191, 156, 16, 0.5);
+  background-color: var(--light-blue);
   border: none;
   width: 20%;
-  border-radius: 10px;
-  font-size: 2.5rem;
+  font-size: 1.3rem;
+  font-weight: 200;
   outline: none;
   cursor: pointer;
+  opacity: 1;
   transition: 0.3s;
 }
 #sendButton:hover {
-  background-color: rgba(191, 156, 16);
+  opacity: 0.8;
 }
 #messages {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  height: calc(100vh - 40px - 70px);
-  /* (100vh - loginNavbar's height and chatForm's height) */
+  height: calc(100vh - 40px - 70px); /* (100vh - loginNavbar's height and chatForm's height) */
   overflow: auto;
 }
 li {
-  font-size: 1.5rem;
-  border-radius: 10px;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 1rem;
   margin: 0.3rem;
+  font-weight: 200;
+}
+.username {
+  color: var(--grey);
+  font-weight: 400;
 }
 .ownMessage {
-  background-color: rgba(191, 156, 16, 0.304);
+  background-color: var(--medium-blue);
 }
 .othersMessage {
-  background-color: rgba(191, 156, 16, 0.762);
+  background-color: var(--light-blue);
   text-align: right;
 }
 .joinedAndLeftMessage {
   text-align: center;
   width: 50%;
   margin: 0.5rem auto;
-  border-radius: 2rem;
 }
 #userJoinedMessage {
   color: darkgreen;
@@ -145,56 +145,54 @@ li {
 time {
   display: block;
   text-align: right;
-  font-size: 1.2rem;
-  color: rgb(129, 104, 8);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  color: var(--grey);
+  font-weight: 100;
 }
 
 /* Login page styles */
 #invalidUsernameOrPassword {
-  color: red;
-  font-size: 1.5rem;
+  color: var(--red);
+  font-weight: 300;
 }
 #usernameTaken {
-  color: rgb(110, 98, 98);
-  font-size: 1.5rem;
+  color: var(--red);
+  font-weight: 300;
 }
 #loginBoxContainer {
   position: fixed;
   height: 100%;
   width: 100%;
-  background-color: rgb(127, 107, 28);
+  background-color: var(--dark-blue);
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 #loginBox {
-  background-image: url("/icons/yellow-bird.svg");
-  background-repeat: no-repeat;
-  background-position: right;
-  background-position: center center;
-  background-color: rgb(237, 199, 49);
-  border-radius: 10px;
+  background-image: linear-gradient(180deg, var(--dark-blue), var(--medium-blue));
   height: 50%;
   width: 50%;
-  border: 5px solid rgb(191, 156, 16);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   overflow-x: auto;
 }
-#yellowchat {
-  color: rgb(146, 119, 11);
+#secretchat {
+  color: var(--grey);
+  font-size: 1.3rem;
+  font-weight: 400;
   margin: 0;
 }
-
 .loginInput {
-  text-align: center;
-  border-width: 0 0 3px 0;
-  border-bottom: 3px solid;
+  border: none;
   background-color: transparent;
+  border-bottom: 1px solid white;
+  padding-left: 10px;
   display: block;
-  font-size: 2rem;
+  font-size: 1rem;
+  font-weight: 200;
   margin: 0 auto 1rem auto;
   width: 70%;
   height: 3rem;
@@ -203,30 +201,27 @@ time {
   outline: none;
 }
 .loginFormStyle {
-  font-size: 2rem;
+  font-size: 1rem;
 }
 .loginButton {
+  width: 70%;
   cursor: pointer;
   padding: 1rem;
-  font-size: 2rem;
-  border-radius: 10px;
-  background-color: rgb(191, 156, 16, 0.5);
+  font-size: 1rem;
+  font-weight: 200;
+  background-color: var(--light-blue);
+  opacity: 1;
   border: none;
-  box-shadow: 5px 5px rgb(144, 118, 12);
-  transition: 0.3s background-color;
-}
-.loginButton:active {
-  box-shadow: none;
-  transform: translate(5px, 5px);
+  transition: 0.3s;
 }
 .loginButton:hover {
-  background-color: rgb(191, 156, 16);
+  opacity: 0.8;
 }
 
 .createAnAccount {
   text-decoration: none;
   display: block;
-  font-size: 1.5rem;
+  font-weight: 200;
 }
 .createAnAccount:hover {
   text-decoration: underline;
