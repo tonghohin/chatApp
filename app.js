@@ -19,22 +19,22 @@ server.listen(process.env.PORT || 3000, () => {
 });
 
 // Connect to MySQL database
-// const connection = mysql.createConnection({
-//   host: process.env.MYSQL_HOST,
-//   user: process.env.MYSQL_USER,
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.MYSQL_DATABASE,
-//   port: process.env.MYSQL_PORT,
-//   ssl: { ca: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") }
-// });
+const connection = mysql.createConnection({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT,
+  ssl: { ca: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") }
+});
 
 // Connect to test database
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "Yellowchat"
-});
+// const connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "password",
+//   database: "Yellowchat"
+// });
 
 connection.connect((err) => {
   if (err) {
