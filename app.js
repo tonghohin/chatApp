@@ -1,3 +1,5 @@
+require("dotenv").config();
+const fs = require("fs");
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -18,10 +20,12 @@ server.listen(process.env.PORT || 3000, () => {
 
 // Connect to MySQL database
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "Yellowchat"
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT,
+  ssl: { ca: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") }
 });
 
 connection.connect((err) => {
@@ -93,11 +97,12 @@ function loggedOut(req, res, next) {
 }
 
 app.get("/", loggedIn, (req, res) => {
-  connection.query("SELECT * FROM users WHERE user_id = ?", [req.session.passport.user], (err, result) => {
+  connection.query("SELECT ca.chat, ca.user_id, ca.timestamp, u.username FROM chat_archive ca JOIN users u ON ca.user_id = u.user_id", (err, result) => {
     if (err) {
       console.log(err);
     }
-    res.render("index", { username: getUserName(req.session.passport.user), userlist: CURRENT_USERS });
+    console.log("hihi", result);
+    res.render("index", { username: getUserName(req.session.passport.user), userlist: CURRENT_USERS, chathistory: result });
   });
 });
 
@@ -190,10 +195,6 @@ io.on("connection", (socket) => {
   });
 
   socket.broadcast.emit("someoneLoggedIn", getUserName(socket.request.session.passport.user));
-
-  socket.on("logout", (usr) => {
-    io.emit("logout", usr);
-  });
 
   socket.on("chatMessage", (msg, time) => {
     console.log(`'${msg}', AT ${time.slice(0, 19).replace("T", " ")}`);

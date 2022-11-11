@@ -22,7 +22,13 @@
 
       <ul class="userlist"></ul>
 
-      <ul id="messages"></ul>
+      <ul id="messages">
+        <% for (const chatObject of chathistory) { if (chatObject.username === username) { %>
+        <li class="ownMessage"><span class="username">You: </span><%= chatObject.chat %> <time><%= chatObject.timestamp.toLocaleString("en-US").replace(/,/g, "") %></time></li>
+        <% } else { %>
+        <li class="othersMessage"><span class="username"><%= chatObject.username %>: </span><%= chatObject.chat %><time><%= chatObject.timestamp.toLocaleString("en-US").replace(/,/g, "") %></time></li>
+        <% }} %>
+      </ul>
 
       <form id="chatForm">
         <input id="chatInput" autocomplete="off" type="text" autofocus />
