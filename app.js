@@ -93,11 +93,11 @@ function loggedOut(req, res, next) {
 }
 
 app.get("/", loggedIn, (req, res) => {
-  connection.query("SELECT username FROM users WHERE user_id = ?", [req.session.passport.user], (err, result) => {
+  connection.query("SELECT * FROM users WHERE user_id = ?", [req.session.passport.user], (err, result) => {
     if (err) {
       console.log(err);
     }
-    res.render("index", { username: result[0].username, userlist: CURRENT_USERS });
+    res.render("index", { username: getUserName(req.session.passport.user), userlist: CURRENT_USERS });
   });
 });
 
@@ -109,7 +109,7 @@ app.get("/login", loggedOut, (req, res) => {
   res.render("login", { error: req.query.error });
 });
 
-app.get("/create", (req, res) => {
+app.get("/create", loggedOut, (req, res) => {
   res.render("create", { error: req.query.error });
 });
 
@@ -141,8 +141,7 @@ app.post("/create-account", (req, res) => {
           if (err) {
             return next(err);
           }
-          const newUserSQL = `INSERT INTO users (username, user_password) VALUES ('${createUsername}','${hash}')`;
-          connection.query(newUserSQL, (err) => {
+          connection.query("INSERT INTO users (username, user_password) VALUES (?, ?)", [createUsername, hash], (err) => {
             if (err) {
               console.log("CREATE ACCOUNT ERROR:", err);
             }
@@ -173,8 +172,6 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("IO Connected");
-
   app.get("/logout", (req, res) => {
     socket.emit("someoneLoggedOut", getUserName(req.session.passport.user));
 
@@ -199,8 +196,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chatMessage", (msg, time) => {
-    console.log(`'${msg}', AT ${time}`);
+    console.log(`'${msg}', AT ${time.slice(0, 19).replace("T", " ")}`);
     socket.broadcast.emit("chatMessage", msg, time, getUserName(socket.request.session.passport.user));
+
+    connection.query("INSERT INTO chat_archive (chat, user_id, timestamp) VALUES (?, ?, ?)", [msg, socket.request.session.passport.user, time.slice(0, 19).replace("T", " ")], (err) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log("Chat archived");
+    });
   });
 });
 

@@ -8,10 +8,10 @@ const userlist = document.querySelector(".userlist");
 
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const time = new Date().toLocaleString("en-US").replace(/,/g, "");
+  const time = new Date();
   if (chatInput.value) {
     socket.emit("chatMessage", chatInput.value, time);
-    messages.innerHTML += `<li class="ownMessage"><span class="username">You: </span>${chatInput.value}<time>${time}</time></li>`;
+    messages.innerHTML += `<li class="ownMessage"><span class="username">You: </span>${chatInput.value}<time>${time.toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
     messages.scrollTop = messages.scrollHeight;
     chatForm.reset();
   }
@@ -34,7 +34,7 @@ socket.on("someoneLoggedOut", (usr) => {
 
 socket.on("chatMessage", (msg, time, usr) => {
   console.log(",asdk;jlvbdslkBV;JKSDBV;skj", msg, time, usr);
-  messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${time}</time></li>`;
+  messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${time.toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
   messages.scrollTop = messages.scrollHeight;
 });
 
@@ -51,3 +51,5 @@ listIcon.addEventListener("click", () => {
       }
     });
 });
+
+console.log(new Date().toISOString().slice(0, 19).replace("T", " "));
