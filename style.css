@@ -1,5 +1,5 @@
 :root {
-  --dark-blue: rgb(17, 17, 26);
+  --dark-blue: rgb(16, 16, 25);
   --medium-blue: rgb(22, 28, 36);
   --light-blue: rgb(27, 43, 64);
   --grey: rgb(104, 119, 138);
@@ -199,6 +199,10 @@ time {
   color: var(--light-red);
   font-weight: 300;
 }
+#accountCreated {
+  color: var(--light-green);
+  font-weight: 300;
+}
 #loginBoxContainer {
   position: fixed;
   height: 100%;
@@ -216,6 +220,7 @@ time {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
   overflow-x: auto;
 }
 #secretchat {
@@ -256,7 +261,6 @@ time {
 .loginButton:hover {
   opacity: 0.8;
 }
-
 .createAnAccount {
   text-decoration: none;
   display: block;

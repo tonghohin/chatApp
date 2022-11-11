@@ -19,13 +19,21 @@ server.listen(process.env.PORT || 3000, () => {
 });
 
 // Connect to MySQL database
+// const connection = mysql.createConnection({
+//   host: process.env.MYSQL_HOST,
+//   user: process.env.MYSQL_USER,
+//   password: process.env.MYSQL_PASSWORD,
+//   database: process.env.MYSQL_DATABASE,
+//   port: process.env.MYSQL_PORT,
+//   ssl: { ca: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") }
+// });
+
+// Connect to test database
 const connection = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  port: process.env.MYSQL_PORT,
-  ssl: { ca: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") }
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "Yellowchat"
 });
 
 connection.connect((err) => {
@@ -115,7 +123,7 @@ app.get("/login", loggedOut, (req, res) => {
 });
 
 app.get("/create", loggedOut, (req, res) => {
-  res.render("create", { error: req.query.error });
+  res.render("create", { error: req.query.error, accountCreated: false });
 });
 
 app.post(
@@ -126,11 +134,8 @@ app.post(
   })
 );
 
-app.post("/create-account", (req, res) => {
-  console.log(req.body);
+app.post("/create", (req, res) => {
   const { createUsername, createPassword } = req.body;
-  console.log(createUsername);
-  console.log(createPassword);
 
   connection.query("SELECT username FROM users WHERE username = ? ", [createUsername], (err, result) => {
     if (err) {
@@ -154,7 +159,7 @@ app.post("/create-account", (req, res) => {
           });
         });
       });
-      res.redirect("/login");
+      res.render("create", { error: false, accountCreated: true });
     } else {
       console.log("Username exists!!!");
       res.redirect("/create?error=true");
@@ -163,11 +168,9 @@ app.post("/create-account", (req, res) => {
 });
 
 const wrap = (middleware) => (socket, next) => middleware(socket.request, {}, next);
-
 io.use(wrap(sessionMiddleware));
 io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
-
 io.use((socket, next) => {
   if (socket.request.user) {
     next();

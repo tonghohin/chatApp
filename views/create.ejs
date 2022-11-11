@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Secret Chat</title>
     <link rel="stylesheet" href="../style.css" />
-    <link rel="shortcut icon" href="yellow-bird.svg" type="image/x-icon" />
+    <link rel="shortcut icon" href="/icons/sunglasses.svg" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&display=swap" rel="stylesheet" />
   </head>
@@ -16,7 +15,8 @@
     <section id="loginBoxContainer">
       <div id="loginBox">
         <h1 id="secretchat">Welcome to Secret Chat</h1>
-        <form class="loginFormStyle" id="createAccountForm" action="/create-account" method="POST">
+        <% if (!accountCreated) { %>
+        <form class="loginFormStyle" id="createAccountForm" action="/create" method="POST">
           <input type="text" name="createUsername" id="createUsername" class="loginInput" autofocus required placeholder="Create username" />
           <input type="text" name="createPassword" id="createPassword" class="loginInput" required placeholder="Create password" />
           <% if (error) { %>
@@ -24,6 +24,10 @@
           <% } %>
           <button type="submit" class="loginButton">Create account</button>
         </form>
+        <% } else { %>
+        <p id="accountCreated">Account created!</p>
+        <a href="/login" class="loginButton">Go to login page</a>
+        <% } %>
         <a href="/login" class="createAnAccount">Already have an account? Login now!</a>
       </div>
     </section>
