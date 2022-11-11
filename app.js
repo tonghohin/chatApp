@@ -4,7 +4,6 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -12,6 +11,10 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 const { use } = require("passport");
 const sessionMiddleware = session({ secret: "secret", resave: false, saveUninitialized: true });
+
+server.listen(process.env.PORT || 3000, () => {
+  console.log("SERVER LISTENING!");
+});
 
 // Connect to MySQL database
 const connection = mysql.createConnection({
@@ -44,6 +47,7 @@ const CURRENT_USERS = [];
 passport.serializeUser((user, done) => {
   CURRENT_USERS.push({ USER_ID: user[0].user_id, USERNAME: user[0].username });
   done(null, user[0].user_id);
+  console.log("LIST", CURRENT_USERS);
 });
 
 passport.deserializeUser((id, done) => {
@@ -93,8 +97,12 @@ app.get("/", loggedIn, (req, res) => {
     if (err) {
       console.log(err);
     }
-    res.render("index", { username: result[0].username });
+    res.render("index", { username: result[0].username, userlist: CURRENT_USERS });
   });
+});
+
+app.get("/getUserList", (req, res) => {
+  res.json(CURRENT_USERS);
 });
 
 app.get("/login", loggedOut, (req, res) => {
@@ -112,15 +120,6 @@ app.post(
     failureRedirect: "/login?error=true"
   })
 );
-
-app.get("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-});
 
 app.post("/create-account", (req, res) => {
   console.log(req.body);
@@ -159,33 +158,6 @@ app.post("/create-account", (req, res) => {
   });
 });
 
-// connection.query(`SELECT user_password FROM users WHERE username = ${username}`, (err, results, fields) => {
-//   if (err) {
-//     return done(err);
-//   }
-
-//   if (result[0] !== undefined && result[0].user_password === password) {
-//     req.session.loggedin = true;
-//     req.session.username = username;
-//     req.session.cookie.username = username;
-//     console.log(req.session.cookie);
-//     res.redirect("./chatroom.html");
-//     io.emit("checkLoginUsernameAndPassword", username, true);
-//     currentUserList[findSocketID(currentUserList, socket.id)].username = req.body.username;
-//     console.log("A USER LOGGED IN:", req.body.username);
-//     console.log("CURRENT USERS:", currentUserList);
-//   } else if (result[0] !== password) {
-//     res.sendFile(__dirname + "/index.html");
-
-//     io.emit("checkLoginUsernameAndPassword", req.body.username, false);
-//   }
-// });
-
-// app.post("/", (req, res) => {
-//   console.log(req.body);
-//   const { username, password } = req.body;
-// });
-
 const wrap = (middleware) => (socket, next) => middleware(socket.request, {}, next);
 
 io.use(wrap(sessionMiddleware));
@@ -201,23 +173,26 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  // currentUserList.push({ socketID: socket.id, username: "" });
-  // console.log("CURRENT USERS:", currentUserList);
+  console.log("IO Connected");
 
-  // socket.on("disconnect", () => {
-  //   if (findUsername(currentUserList, socket.id) !== "") {
-  //     io.emit("left", findUsername(currentUserList, socket.id));
-  //   }
-  //   console.log("A USER DISCONNECTED:", socket.id);
-  //   currentUserList.splice(findSocketID(currentUserList, socket.id), 1);
-  //   console.log("CURRENT USERS:", currentUserList);
-  // });
+  app.get("/logout", (req, res) => {
+    socket.emit("someoneLoggedOut", getUserName(req.session.passport.user));
 
-  // socket.on("logout", (usr) => {
-  //   console.log(usr, "LEFT!!!!!!!!!");
-  // });
+    for (let i = 0; i < CURRENT_USERS.length; i++) {
+      if (CURRENT_USERS[i].USER_ID === req.session.passport.user) {
+        CURRENT_USERS.splice(i, 1);
+      }
+    }
 
-  socket.emit("loggedIn", getUserName(socket.request.session.passport.user));
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
+  });
+
+  socket.broadcast.emit("someoneLoggedIn", getUserName(socket.request.session.passport.user));
 
   socket.on("logout", (usr) => {
     io.emit("logout", usr);
@@ -227,48 +202,6 @@ io.on("connection", (socket) => {
     console.log(`'${msg}', AT ${time}`);
     socket.broadcast.emit("chatMessage", msg, time, getUserName(socket.request.session.passport.user));
   });
-
-  // socket.on("login", (usr, pwd) => {
-  //   const matchUsernameAndPasswordSQL = `SELECT user_password FROM users WHERE username = '${usr}'`;
-  //   connection.query(matchUsernameAndPasswordSQL, (err, result) => {
-  //     if (err) {
-  //       console.log("LOGIN ERROR:", err);
-  //     }
-  //     if (result[0] !== undefined && result[0].user_password === pwd) {
-  //       io.emit("checkLoginUsernameAndPassword", usr, true);
-  //       currentUserList[findSocketID(currentUserList, socket.id)].username = usr;
-  //       console.log("A USER LOGGED IN:", usr);
-  //       console.log("CURRENT USERS:", currentUserList);
-  //     } else if (result[0] !== pwd) {
-  //       io.emit("checkLoginUsernameAndPassword", usr, false);
-  //     }
-  //   });
-  // });
-
-  // socket.on("createAccount", (usr, pwd) => {
-  //   const findUsernameExistsSQL = `SELECT username FROM users WHERE username = '${usr}'`;
-  //   connection.query(findUsernameExistsSQL, (err, result) => {
-  //     if (err) {
-  //       console.log("CHECK USERNAME EXISTS ERROR:", err);
-  //     }
-  //     if (result[0] === undefined) {
-  //       io.emit("usernameAvailable", true);
-  //       const newUserSQL = `INSERT INTO users (username, user_password) VALUES ('${usr}','${pwd}')`;
-  //       connection.query(newUserSQL, (err) => {
-  //         if (err) {
-  //           console.log("CREATE ACCOUNT ERROR:", err);
-  //         }
-  //         console.log("NEW USER ACCOUNT CREATED");
-  //       });
-  //     } else {
-  //       io.emit("usernameAvailable", false);
-  //     }
-  //   });
-  // });
-});
-
-server.listen(process.env.PORT || 3000, () => {
-  console.log("SERVER LISTENING!");
 });
 
 function getUserName(id) {

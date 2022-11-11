@@ -3,28 +3,8 @@ const messages = document.querySelector("#messages");
 const chatForm = document.querySelector("#chatForm");
 const chatInput = document.querySelector("#chatInput");
 const youAreLoggedInAs = document.querySelector("#youAreLoggedInAs");
-
-// window.addEventListener("beforeunload", () => {
-//   socket.emit("logout", username);
-//   sessionStorage.removeItem("socketID");
-//   sessionStorage.removeItem("username");
-// });
-
-// socket.on("disconnect", () => {
-//   socket.emit("logout", username);
-// });
-
-// socket.on("checkLoginUsernameAndPassword", (usr, matchedUsernameAndPassword) => {
-//   if (matchedUsernameAndPassword) {
-//     messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${usr} has joined</li>`;
-//     messages.scrollTop = messages.scrollHeight;
-//   }
-// });
-
-let username;
-socket.on("loggedIn", (usr) => {
-  username = usr;
-});
+const listIcon = document.querySelector("#listIcon");
+const userlist = document.querySelector(".userlist");
 
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -37,20 +17,37 @@ chatForm.addEventListener("submit", (e) => {
   }
 });
 
+const USER_LIST = [];
 socket.on("someoneLoggedIn", (usr) => {
-  messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${usr} has joined</li>`;
+  if (!USER_LIST.includes(usr)) {
+    messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${usr} has joined</li>`;
+    messages.scrollTop = messages.scrollHeight;
+    USER_LIST.push(usr);
+  }
+});
+
+socket.on("someoneLoggedOut", (usr) => {
+  messages.innerHTML += `<li class="joinedAndLeftMessage" id="userLeftMessage">${usr} has left</li>`;
   messages.scrollTop = messages.scrollHeight;
+  USER_LIST.splice(USER_LIST.indexOf(usr), 1);
 });
 
 socket.on("chatMessage", (msg, time, usr) => {
   console.log(",asdk;jlvbdslkBV;JKSDBV;skj", msg, time, usr);
-  // messages.innerHTML += `<li class='ownMessage'>${usr}: ${msg}<time>${time}</time></li>`;
-  // messages.scrollTop = messages.scrollHeight;
   messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${time}</time></li>`;
   messages.scrollTop = messages.scrollHeight;
 });
 
-// socket.on("someoneLoggedIn", (usr) => {
-//   messages.innerHTML += `<li class="joinedAndLeftMessage" id="userLeftMessage">${usr} has left</li>`;
-//   messages.scrollTop = messages.scrollHeight;
-// });
+listIcon.addEventListener("click", () => {
+  userlist.classList.toggle("appear");
+  userlist.innerHTML = "<li>Online Users</li>";
+
+  fetch("/getUserList")
+    .then((res) => res.json())
+    .then((data) => {
+      for (const user of data) {
+        userlist.innerHTML += `
+        <li>${user.USERNAME}</li>`;
+      }
+    });
+});
