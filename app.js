@@ -105,7 +105,7 @@ function loggedOut(req, res, next) {
 }
 
 app.get("/", loggedIn, (req, res) => {
-  connection.query("SELECT ca.chat, ca.user_id, ca.timestamp, u.username FROM chat_archive ca JOIN users u ON ca.user_id = u.user_id", (err, result) => {
+  connection.query("SELECT ca.chat, ca.user_id, ca.timestamp, u.username FROM chat_archive ca JOIN users u ON ca.user_id = u.user_id ORDER BY ca.timestamp", (err, result) => {
     if (err) {
       console.log(err);
     }
