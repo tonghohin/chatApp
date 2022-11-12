@@ -2,7 +2,7 @@
   --dark-blue: rgb(16, 16, 25);
   --medium-blue: rgb(22, 28, 36);
   --light-blue: rgb(27, 43, 64);
-  --grey: rgb(104, 119, 138);
+  --grey: hsl(214, 14%, 47%);
   --dark-green: rgb(31, 53, 31);
   --light-green: rgb(23, 164, 23);
   --dark-red: rgb(54, 24, 24);
@@ -242,6 +242,20 @@ time {
   font-weight: 200;
   margin: 0 auto 1rem auto;
   height: 2.5rem;
+  width: 90%;
+  padding-left: 35px;
+}
+.loginInput:first-child {
+  background-image: url("/icons/sunglasses.svg");
+  background-repeat: no-repeat;
+  background-position: center left;
+  background-size: 30px 30px;
+}
+.loginInput:nth-child(2) {
+  background-image: url("/icons/lock.svg");
+  background-repeat: no-repeat;
+  background-position: center left;
+  background-size: 30px 30px;
 }
 .loginInput:focus {
   outline: none;
