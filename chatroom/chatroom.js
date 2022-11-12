@@ -54,5 +54,3 @@ listIcon.addEventListener("click", () => {
       });
   }
 });
-
-console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
