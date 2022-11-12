@@ -157,6 +157,7 @@ body {
   padding: 0.4rem 1rem;
   margin: 0.3rem;
   font-weight: 200;
+  word-break: break-all;
 }
 .othersMessage {
   background-color: var(--light-blue);
@@ -164,6 +165,7 @@ body {
   padding: 0.4rem 1rem;
   margin: 0.3rem;
   font-weight: 200;
+  word-break: break-all;
 }
 .joinedAndLeftMessage {
   text-align: center;

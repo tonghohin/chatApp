@@ -23,9 +23,9 @@
 
       <ul id="messages">
         <% for (const chatObject of chathistory) { if (chatObject.username === username) { %>
-        <li class="ownMessage"><span class="username">You: </span><%= chatObject.chat %> <time><%= new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "") %></time></li>
+        <li class="ownMessage"><span class="username">You: </span><%= chatObject.chat %> <time><%= new Date(chatObject.timestamp).toLocaleString("en-US", {timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}).replace(/,/g, "") %></time></li>
         <% } else { %>
-        <li class="othersMessage"><span class="username"><%= chatObject.username %>: </span><%= chatObject.chat %><time><%= new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "") %></time></li>
+        <li class="othersMessage"><span class="username"><%= chatObject.username %>: </span><%= chatObject.chat %><time><%= new Date(chatObject.timestamp).toLocaleString("en-US", {timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}).replace(/,/g, "") %></time></li>
         <% }} %>
       </ul>
 

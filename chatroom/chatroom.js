@@ -55,4 +55,4 @@ listIcon.addEventListener("click", () => {
   }
 });
 
-console.log(new Date().toISOString().slice(0, 19).replace("T", " "));
+console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
