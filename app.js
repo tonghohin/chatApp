@@ -109,7 +109,7 @@ app.get("/", loggedIn, (req, res) => {
 });
 
 app.get("/getuserList", (req, res) => {
-  res.json(CURRENT_USERS);
+  res.json({ username: getUserName(req.session.passport.user), userlist: CURRENT_USERS });
 });
 
 app.get("/getpreivouschats", (req, res) => {

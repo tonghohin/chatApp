@@ -36,15 +36,16 @@ chatForm.addEventListener("submit", (e) => {
 
 listIcon.addEventListener("click", () => {
   userlist.classList.toggle("appear");
-  userlist.innerHTML = "<li>Online Users</li>";
 
   if (userlist.classList.contains("appear")) {
     fetch("/getuserList")
       .then((res) => res.json())
       .then((data) => {
-        for (const user of data) {
-          userlist.innerHTML += `
-          <li>${user.USERNAME}</li>`;
+        for (const userObject of data.userlist) {
+          if (userObject.USERNAME === data.username) {
+            continue;
+          }
+          userlist.innerHTML += `<li>${userObject.USERNAME}</li>`;
         }
       });
   }
