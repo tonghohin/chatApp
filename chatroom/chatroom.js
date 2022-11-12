@@ -6,6 +6,22 @@ const youAreLoggedInAs = document.querySelector("#youAreLoggedInAs");
 const listIcon = document.querySelector("#listIcon");
 const userlist = document.querySelector(".userlist");
 
+fetch("/getpreivouschats")
+  .then((res) => res.json())
+  .then((data) => {
+    for (const chatObject of data.previouschats) {
+      if (chatObject.username === data.username) {
+        messages.innerHTML += `
+          <li class="ownMessage"><span class="username">You: </span>${chatObject.chat}<time>${new Date(chatObject.timestamp).toLocaleString("en-US", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }).replace(/,/g, "")}</time></li>`;
+        messages.scrollTop = messages.scrollHeight;
+      } else {
+        messages.innerHTML += `
+         <li class="othersMessage"><span class="username">${chatObject.username}: </span>${chatObject.chat} <time>${new Date(chatObject.timestamp).toLocaleString("en-US", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }).replace(/,/g, "")}</time></li>`;
+        messages.scrollTop = messages.scrollHeight;
+      }
+    }
+  });
+
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const time = new Date().toISOString();
@@ -15,6 +31,22 @@ chatForm.addEventListener("submit", (e) => {
     messages.innerHTML += `<li class="ownMessage"><span class="username">You: </span>${chatInput.value}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
     messages.scrollTop = messages.scrollHeight;
     chatForm.reset();
+  }
+});
+
+listIcon.addEventListener("click", () => {
+  userlist.classList.toggle("appear");
+  userlist.innerHTML = "<li>Online Users</li>";
+
+  if (userlist.classList.contains("appear")) {
+    fetch("/getuserList")
+      .then((res) => res.json())
+      .then((data) => {
+        for (const user of data) {
+          userlist.innerHTML += `
+          <li>${user.USERNAME}</li>`;
+        }
+      });
   }
 });
 
@@ -35,22 +67,6 @@ socket.on("someoneLoggedOut", (usr) => {
 
 socket.on("chatMessage", (msg, time, usr) => {
   console.log(",asdk;jlvbdslkBV;JKSDBV;skj", msg, time, usr);
-  messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${time.toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+  messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
   messages.scrollTop = messages.scrollHeight;
-});
-
-listIcon.addEventListener("click", () => {
-  userlist.classList.toggle("appear");
-  userlist.innerHTML = "<li>Online Users</li>";
-
-  if (userlist.classList.contains("appear")) {
-    fetch("/getUserList")
-      .then((res) => res.json())
-      .then((data) => {
-        for (const user of data) {
-          userlist.innerHTML += `
-          <li>${user.USERNAME}</li>`;
-        }
-      });
-  }
 });

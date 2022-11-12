@@ -20,15 +20,14 @@ body {
   background-color: var(--dark-blue);
 }
 /* Chatroom page styles */
-#chatroomContainer {
-  display: grid;
-  grid-row: 5vh auto 5rem;
-}
 #chatroomNavbar {
   background-color: var(--medium-blue);
   border-bottom: 1px solid var(--light-blue);
-  box-shadow: 0px 2px 5px var(--light-blue);
+  box-shadow: 0px 3px 3px var(--light-blue);
   position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
   padding: 2px;
   height: 40px;
   width: 100%;
@@ -50,9 +49,8 @@ body {
   height: 100%;
   cursor: pointer;
   transition: 0.2s;
-  position: relative;
 }
-#listOfParticipants:hover {
+#listIcon:hover {
   height: 110%;
 }
 #loggedIn {
@@ -77,9 +75,10 @@ body {
   height: 110%;
 }
 .userlist {
-  position: absolute;
+  position: fixed;
   margin: 0;
   top: 40px;
+  left: 0;
   background-color: var(--medium-blue);
   box-shadow: 3px 3px 3px var(--light-blue);
   width: clamp(150px, 25%, 200px);
@@ -106,45 +105,10 @@ body {
   background-repeat: no-repeat;
   background-position: center right;
 }
-#chatForm {
-  padding: 0.5rem 1rem;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  height: 70px;
-  column-gap: 20px;
-}
-#chatInput {
-  font-size: 1.3rem;
-  font-weight: 200;
-  padding-left: 10px;
-  border: none;
-  background-color: var(--medium-blue);
-  flex-grow: 1;
-}
-#chatInput:focus {
-  outline: none;
-}
-#sendButton {
-  background-color: var(--light-blue);
-  border: none;
-  width: 20%;
-  font-size: 1.3rem;
-  font-weight: 200;
-  outline: none;
-  cursor: pointer;
-  opacity: 1;
-  transition: 0.3s;
-}
-#sendButton:hover {
-  opacity: 0.8;
-}
 #messages {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 1rem;
   height: calc(100vh - 40px - 70px); /* (100vh - loginNavbar's height and chatForm's height) */
   overflow: auto;
 }
@@ -189,6 +153,43 @@ time {
   margin-top: 0.5rem;
   color: var(--grey);
   font-weight: 100;
+}
+#chatForm {
+  padding: 0.5rem 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 70px;
+  column-gap: 20px;
+  background-color: var(--dark-blue);
+  box-shadow: 0 -3px 3px var(--grey);
+}
+#chatInput {
+  font-size: 1.3rem;
+  font-weight: 200;
+  padding-left: 10px;
+  border: none;
+  background-color: var(--medium-blue);
+  flex-grow: 1;
+}
+#chatInput:focus {
+  outline: none;
+}
+#sendButton {
+  background-color: var(--light-blue);
+  border: none;
+  width: 20%;
+  font-size: 1.3rem;
+  font-weight: 200;
+  outline: none;
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.3s;
+}
+#sendButton:hover {
+  opacity: 0.8;
 }
 
 /* Login page styles */

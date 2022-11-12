@@ -12,28 +12,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <section id="chatroomContainer">
-      <nav id="chatroomNavbar">
-        <div id="listIcon" title="See who's here!"></div>
-        <span id="loggedIn">You are logged in as <span id="youAreLoggedInAs"><%= username %></span></span>
-        <a href="/logout" id="logout" title="Logout"></a>
-      </nav>
+    <nav id="chatroomNavbar">
+      <div id="listIcon" title="See who's here!"></div>
+      <span id="loggedIn">You are logged in as <span id="youAreLoggedInAs"><%= username %></span></span>
+      <a href="/logout" id="logout" title="Logout"></a>
+    </nav>
 
-      <ul class="userlist"></ul>
+    <ul class="userlist"></ul>
 
-      <ul id="messages">
-        <% for (const chatObject of chathistory) { if (chatObject.username === username) { %>
-        <li class="ownMessage"><span class="username">You: </span><%= chatObject.chat %> <time><%= new Date(chatObject.timestamp).toLocaleString("en-US", {timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}).replace(/,/g, "") %></time></li>
-        <% } else { %>
-        <li class="othersMessage"><span class="username"><%= chatObject.username %>: </span><%= chatObject.chat %><time><%= new Date(chatObject.timestamp).toLocaleString("en-US", {timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}).replace(/,/g, "") %></time></li>
-        <% }} %>
-      </ul>
+    <ul id="messages"></ul>
 
-      <form id="chatForm">
-        <input id="chatInput" autocomplete="off" type="text" autofocus />
-        <button type="submit" id="sendButton">Send</button>
-      </form>
-    </section>
+    <form id="chatForm">
+      <input id="chatInput" autocomplete="off" type="text" autofocus />
+      <button type="submit" id="sendButton">Send</button>
+    </form>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chatroom/chatroom.js" async></script>

@@ -105,17 +105,22 @@ function loggedOut(req, res, next) {
 }
 
 app.get("/", loggedIn, (req, res) => {
+  res.render("index", { username: getUserName(req.session.passport.user), userlist: CURRENT_USERS });
+});
+
+app.get("/getuserList", (req, res) => {
+  res.json(CURRENT_USERS);
+});
+
+app.get("/getpreivouschats", (req, res) => {
+  console.log("fetchs");
   connection.query("SELECT ca.chat, ca.user_id, ca.timestamp, u.username FROM chat_archive ca JOIN users u ON ca.user_id = u.user_id ORDER BY ca.timestamp", (err, result) => {
     if (err) {
       console.log(err);
     }
     console.log("hihi", result);
-    res.render("index", { username: getUserName(req.session.passport.user), userlist: CURRENT_USERS, chathistory: result });
+    res.json({ previouschats: result, username: getUserName(req.session.passport.user) });
   });
-});
-
-app.get("/getUserList", (req, res) => {
-  res.json(CURRENT_USERS);
 });
 
 app.get("/login", loggedOut, (req, res) => {
