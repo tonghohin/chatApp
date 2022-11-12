@@ -83,7 +83,7 @@ body {
   box-shadow: 3px 3px 3px var(--light-blue);
   width: clamp(150px, 25%, 200px);
   list-style-type: none;
-  opacity: 0.7;
+  opacity: 0.8;
   transition: 0.3s;
   height: 0;
   overflow: hidden;

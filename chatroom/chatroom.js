@@ -6,6 +6,8 @@ const youAreLoggedInAs = document.querySelector("#youAreLoggedInAs");
 const listIcon = document.querySelector("#listIcon");
 const userlist = document.querySelector(".userlist");
 
+const USER_LIST = [];
+
 fetch("/getpreivouschats")
   .then((res) => res.json())
   .then((data) => {
@@ -19,6 +21,15 @@ fetch("/getpreivouschats")
          <li class="othersMessage"><span class="username">${chatObject.username}: </span>${chatObject.chat} <time>${new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
         messages.scrollTop = messages.scrollHeight;
       }
+    }
+  });
+
+fetch("/getuserList")
+  .then((res) => res.json())
+  .then((data) => {
+    console.log(data);
+    for (const userObject of data.userlist) {
+      USER_LIST.push(userObject.USERNAME);
     }
   });
 
@@ -55,7 +66,6 @@ listIcon.addEventListener("click", () => {
   }
 });
 
-const USER_LIST = [];
 socket.on("someoneLoggedIn", (usr) => {
   if (!USER_LIST.includes(usr)) {
     messages.innerHTML += `<li class="joinedAndLeftMessage" id="userJoinedMessage">${usr} has joined</li>`;
@@ -65,14 +75,12 @@ socket.on("someoneLoggedIn", (usr) => {
 });
 
 socket.on("someoneLoggedOut", (usr) => {
-  console.log("LOGOUT");
   messages.innerHTML += `<li class="joinedAndLeftMessage" id="userLeftMessage">${usr} has left</li>`;
   messages.scrollTop = messages.scrollHeight;
   USER_LIST.splice(USER_LIST.indexOf(usr), 1);
 });
 
 socket.on("chatMessage", (msg, time, usr) => {
-  console.log(",asdk;jlvbdslkBV;JKSDBV;skj", msg, time, usr);
   messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
   messages.scrollTop = messages.scrollHeight;
 });
