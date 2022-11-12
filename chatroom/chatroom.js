@@ -8,10 +8,11 @@ const userlist = document.querySelector(".userlist");
 
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const time = new Date();
+  const time = new Date().toISOString();
   if (chatInput.value) {
+    console.log(time);
     socket.emit("chatMessage", chatInput.value, time);
-    messages.innerHTML += `<li class="ownMessage"><span class="username">You: </span>${chatInput.value}<time>${time.toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+    messages.innerHTML += `<li class="ownMessage"><span class="username">You: </span>${chatInput.value}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
     messages.scrollTop = messages.scrollHeight;
     chatForm.reset();
   }
@@ -42,14 +43,16 @@ listIcon.addEventListener("click", () => {
   userlist.classList.toggle("appear");
   userlist.innerHTML = "<li>Online Users</li>";
 
-  fetch("/getUserList")
-    .then((res) => res.json())
-    .then((data) => {
-      for (const user of data) {
-        userlist.innerHTML += `
-        <li>${user.USERNAME}</li>`;
-      }
-    });
+  if (userlist.classList.contains("appear")) {
+    fetch("/getUserList")
+      .then((res) => res.json())
+      .then((data) => {
+        for (const user of data) {
+          userlist.innerHTML += `
+          <li>${user.USERNAME}</li>`;
+        }
+      });
+  }
 });
 
 console.log(new Date().toISOString().slice(0, 19).replace("T", " "));

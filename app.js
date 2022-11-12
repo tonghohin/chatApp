@@ -200,10 +200,10 @@ io.on("connection", (socket) => {
   socket.broadcast.emit("someoneLoggedIn", getUserName(socket.request.session.passport.user));
 
   socket.on("chatMessage", (msg, time) => {
-    console.log(`'${msg}', AT ${time.slice(0, 19).replace("T", " ")}`);
+    console.log(`'${msg}', AT ${time.toString()}`);
     socket.broadcast.emit("chatMessage", msg, time, getUserName(socket.request.session.passport.user));
 
-    connection.query("INSERT INTO chat_archive (chat, user_id, timestamp) VALUES (?, ?, ?)", [msg, socket.request.session.passport.user, time.slice(0, 19).replace("T", " ")], (err) => {
+    connection.query("INSERT INTO chat_archive (chat, user_id, timestamp) VALUES (?, ?, ?)", [msg, socket.request.session.passport.user, time], (err) => {
       if (err) {
         console.log(err);
       }
