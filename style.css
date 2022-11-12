@@ -82,8 +82,7 @@ body {
   top: 40px;
   background-color: var(--medium-blue);
   box-shadow: 3px 3px 3px var(--light-blue);
-  width: 25%;
-  max-width: 200px;
+  width: clamp(150px, 25%, 200px);
   list-style-type: none;
   opacity: 0.7;
   transition: 0.3s;
@@ -217,6 +216,8 @@ time {
   background-image: linear-gradient(180deg, var(--dark-blue), var(--medium-blue));
   height: 50%;
   width: 50%;
+  min-height: min-content;
+  min-width: max-content;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -233,13 +234,11 @@ time {
   border: none;
   background-color: transparent;
   border-bottom: 1px solid white;
-  padding-left: 10px;
   display: block;
   font-size: 1rem;
   font-weight: 200;
   margin: 0 auto 1rem auto;
-  width: 70%;
-  height: 3rem;
+  height: 2.5rem;
 }
 .loginInput:focus {
   outline: none;
@@ -248,9 +247,9 @@ time {
   font-size: 1rem;
 }
 .loginButton {
-  width: 70%;
+  min-width: 70%;
   cursor: pointer;
-  padding: 1rem;
+  padding: 0.8rem;
   font-size: 1rem;
   font-weight: 200;
   background-color: var(--light-blue);
