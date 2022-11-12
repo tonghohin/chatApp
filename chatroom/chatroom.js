@@ -12,11 +12,11 @@ fetch("/getpreivouschats")
     for (const chatObject of data.previouschats) {
       if (chatObject.username === data.username) {
         messages.innerHTML += `
-          <li class="ownMessage"><span class="username">You: </span>${chatObject.chat}<time>${new Date(chatObject.timestamp).toLocaleString("en-US", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }).replace(/,/g, "")}</time></li>`;
+          <li class="ownMessage"><span class="username">You: </span>${chatObject.chat}<time>${new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
         messages.scrollTop = messages.scrollHeight;
       } else {
         messages.innerHTML += `
-         <li class="othersMessage"><span class="username">${chatObject.username}: </span>${chatObject.chat} <time>${new Date(chatObject.timestamp).toLocaleString("en-US", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }).replace(/,/g, "")}</time></li>`;
+         <li class="othersMessage"><span class="username">${chatObject.username}: </span>${chatObject.chat} <time>${new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
         messages.scrollTop = messages.scrollHeight;
       }
     }
@@ -41,6 +41,10 @@ listIcon.addEventListener("click", () => {
     fetch("/getuserList")
       .then((res) => res.json())
       .then((data) => {
+        userlist.innerHTML = `
+        <li>Online Users</li>
+        <li>${data.username} (You)</li>
+        `;
         for (const userObject of data.userlist) {
           if (userObject.USERNAME === data.username) {
             continue;
@@ -61,6 +65,7 @@ socket.on("someoneLoggedIn", (usr) => {
 });
 
 socket.on("someoneLoggedOut", (usr) => {
+  console.log("LOGOUT");
   messages.innerHTML += `<li class="joinedAndLeftMessage" id="userLeftMessage">${usr} has left</li>`;
   messages.scrollTop = messages.scrollHeight;
   USER_LIST.splice(USER_LIST.indexOf(usr), 1);

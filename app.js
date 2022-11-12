@@ -186,7 +186,7 @@ io.use((socket, next) => {
 
 io.on("connection", (socket) => {
   app.get("/logout", (req, res) => {
-    socket.emit("someoneLoggedOut", getUserName(req.session.passport.user));
+    socket.broadcast.emit("someoneLoggedOut", getUserName(req.session.passport.user));
 
     for (let i = 0; i < CURRENT_USERS.length; i++) {
       if (CURRENT_USERS[i].USER_ID === req.session.passport.user) {
