@@ -8,7 +8,6 @@
   --dark-red: rgb(54, 24, 24);
   --light-red: rgb(192, 28, 28);
 }
-
 * {
   box-sizing: border-box;
   font-family: "Montserrat", monospace;
@@ -22,14 +21,13 @@ body {
 /* Chatroom page styles */
 #chatroomNavbar {
   background-color: var(--medium-blue);
-  border-bottom: 1px solid var(--light-blue);
-  box-shadow: 0px 3px 3px var(--light-blue);
+  box-shadow: 0px 3px 3px var(--grey);
   position: sticky;
   top: 0;
   right: 0;
   left: 0;
-  padding: 2px;
-  height: 40px;
+  padding: 0.5rem 1rem;
+  height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -77,7 +75,7 @@ body {
 .userlist {
   position: fixed;
   margin: 0;
-  top: 40px;
+  top: 50px;
   left: 0;
   background-color: var(--medium-blue);
   box-shadow: 3px 3px 3px var(--light-blue);
@@ -109,7 +107,7 @@ body {
   list-style-type: none;
   margin: 0;
   padding: 1rem;
-  height: calc(100vh - 40px - 70px); /* (100vh - loginNavbar's height and chatForm's height) */
+  height: calc(100vh - 50px - 70px); /* (100vh - loginNavbar's height and chatForm's height) */
   overflow: auto;
 }
 .username {
@@ -174,7 +172,6 @@ time {
   padding-left: 10px;
   border: none;
   background-color: var(--medium-blue);
-  flex-grow: 1;
 }
 #chatInput:focus {
   outline: none;
@@ -191,7 +188,7 @@ time {
   transition: 0.3s;
 }
 #sendButton:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 /* Login page styles */

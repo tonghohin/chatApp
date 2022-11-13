@@ -45,7 +45,8 @@ chatForm.addEventListener("submit", (e) => {
   }
 });
 
-listIcon.addEventListener("click", () => {
+listIcon.addEventListener("click", (e) => {
+  e.stopPropagation();
   userlist.classList.toggle("appear");
 
   if (userlist.classList.contains("appear")) {
@@ -54,8 +55,7 @@ listIcon.addEventListener("click", () => {
       .then((data) => {
         userlist.innerHTML = `
         <li>Online Users</li>
-        <li>${data.username} (You)</li>
-        `;
+        <li>${data.username} (You)</li>`;
         for (const userObject of data.userlist) {
           if (userObject.USERNAME === data.username) {
             continue;
@@ -63,6 +63,9 @@ listIcon.addEventListener("click", () => {
           userlist.innerHTML += `<li>${userObject.USERNAME}</li>`;
         }
       });
+    document.documentElement.addEventListener("click", () => {
+      userlist.classList.remove("appear");
+    });
   }
 });
 
