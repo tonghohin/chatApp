@@ -92,13 +92,12 @@ function displayChat(chat, time, username = "You") {
 
   if (matchURL) {
     for (const URL of matchURL) {
-      if (URL.search(/^https?/) === -1) {
-        chat = chat.replace(URL, `<a href="//${URL}" target="_blank">${URL}</a>`);
-      } else {
+      if (URL.toLowerCase().startsWith("https://") || URL.toLowerCase().startsWith("http://")) {
         chat = chat.replace(URL, `<a href="${URL}" target="_blank">${URL}</a>`);
+      } else {
+        chat = chat.replace(URL, `<a href="//${URL}" target="_blank">${URL}</a>`);
       }
     }
   }
-
   return `<li class="ownMessage"><span class="username">${username}: </span>${chat}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
 }
