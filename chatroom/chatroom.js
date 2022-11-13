@@ -13,10 +13,10 @@ fetch("/getpreivouschats")
   .then((data) => {
     for (const chatObject of data.previouschats) {
       if (chatObject.username === data.username) {
-        messages.innerHTML += displayChat(chatObject.chat, chatObject.timestamp);
+        messages.innerHTML += displayChat(chatObject.chat, chatObject.timestamp, false);
         messages.scrollTop = messages.scrollHeight;
       } else {
-        messages.innerHTML += displayChat(chatObject.chat, chatObject.timestamp, chatObject.username);
+        messages.innerHTML += displayChat(chatObject.chat, chatObject.timestamp, true, chatObject.username);
         messages.scrollTop = messages.scrollHeight;
       }
     }
@@ -37,7 +37,7 @@ chatForm.addEventListener("submit", (e) => {
   if (chatInput.value) {
     console.log(time);
     socket.emit("chatMessage", chatInput.value, time);
-    messages.innerHTML += displayChat(chatInput.value, time);
+    messages.innerHTML += displayChat(chatInput.value, time, false);
     messages.scrollTop = messages.scrollHeight;
     chatForm.reset();
   }
@@ -82,11 +82,11 @@ socket.on("someoneLoggedOut", (usr) => {
 });
 
 socket.on("chatMessage", (msg, time, usr) => {
-  messages.innerHTML += displayChat(msg, time, usr);
+  messages.innerHTML += displayChat(msg, time, true, usr);
   messages.scrollTop = messages.scrollHeight;
 });
 
-function displayChat(chat, time, username = "You") {
+function displayChat(chat, time, othersmessage, username = "You") {
   const regex = new RegExp(/(([\w]+:)?\/\/)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,253}[\d\w]\.)+[\w]{2,63}(:[\d]+)?(\/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?/, "gi");
   const matchURL = chat.match(regex);
 
@@ -99,5 +99,10 @@ function displayChat(chat, time, username = "You") {
       }
     }
   }
-  return `<li class="ownMessage"><span class="username">${username}: </span>${chat}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+
+  if (othersmessage) {
+    return `<li class="othersMessage"><span class="username">${username}: </span>${chat}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+  } else {
+    return `<li class="ownMessage"><span class="username">${username}: </span>${chat}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+  }
 }
