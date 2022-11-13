@@ -13,12 +13,10 @@ fetch("/getpreivouschats")
   .then((data) => {
     for (const chatObject of data.previouschats) {
       if (chatObject.username === data.username) {
-        messages.innerHTML += `
-          <li class="ownMessage"><span class="username">You: </span>${chatObject.chat}<time>${new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+        messages.innerHTML += displayChat(chatObject.chat, chatObject.timestamp);
         messages.scrollTop = messages.scrollHeight;
       } else {
-        messages.innerHTML += `
-         <li class="othersMessage"><span class="username">${chatObject.username}: </span>${chatObject.chat} <time>${new Date(chatObject.timestamp).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+        messages.innerHTML += displayChat(chatObject.chat, chatObject.timestamp, chatObject.username);
         messages.scrollTop = messages.scrollHeight;
       }
     }
@@ -39,7 +37,7 @@ chatForm.addEventListener("submit", (e) => {
   if (chatInput.value) {
     console.log(time);
     socket.emit("chatMessage", chatInput.value, time);
-    messages.innerHTML += `<li class="ownMessage"><span class="username">You: </span>${chatInput.value}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+    messages.innerHTML += displayChat(chatInput.value, time);
     messages.scrollTop = messages.scrollHeight;
     chatForm.reset();
   }
@@ -84,6 +82,19 @@ socket.on("someoneLoggedOut", (usr) => {
 });
 
 socket.on("chatMessage", (msg, time, usr) => {
-  messages.innerHTML += `<li class="othersMessage"><span class="username">${usr}: </span>${msg}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+  messages.innerHTML += displayChat(msg, time, usr);
   messages.scrollTop = messages.scrollHeight;
 });
+
+function displayChat(chat, time, username = "You") {
+  const regex = new RegExp(/(([\w]+:)?\/\/)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,253}[\d\w]\.)+[\w]{2,63}(:[\d]+)?(\/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?/, "gi");
+  const matchURL = chat.match(regex);
+
+  if (matchURL) {
+    for (const URL of matchURL) {
+      chat = chat.replace(URL, `<a href="//${URL}" target="_blank">${URL}</a>`);
+    }
+  }
+
+  return `<li class="ownMessage"><span class="username">${username}: </span>${chat}<time>${new Date(time).toLocaleString("en-US").replace(/,/g, "")}</time></li>`;
+}
