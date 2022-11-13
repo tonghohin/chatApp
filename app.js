@@ -24,6 +24,7 @@ const connection = mysql.createConnection({
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
+  charset: "utf8mb4",
   port: process.env.MYSQL_PORT,
   ssl: { ca: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") }
 });
@@ -33,7 +34,8 @@ const connection = mysql.createConnection({
 //   host: "localhost",
 //   user: "root",
 //   password: "password",
-//   database: "Yellowchat"
+//   database: "Yellowchat",
+//   charset: "utf8mb4"
 // });
 
 connection.connect((err) => {
