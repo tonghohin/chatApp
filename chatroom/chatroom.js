@@ -92,7 +92,11 @@ function displayChat(chat, time, username = "You") {
 
   if (matchURL) {
     for (const URL of matchURL) {
-      chat = chat.replace(URL, `<a href="//${URL}" target="_blank">${URL}</a>`);
+      if (URL.search(/^https?/) === -1) {
+        chat = chat.replace(URL, `<a href="//${URL}" target="_blank">${URL}</a>`);
+      } else {
+        chat = chat.replace(URL, `<a href="${URL}" target="_blank">${URL}</a>`);
+      }
     }
   }
 
