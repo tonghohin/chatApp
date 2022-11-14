@@ -8,7 +8,7 @@ const userlist = document.querySelector(".userlist");
 
 const USER_LIST = [];
 
-fetch("/getpreivouschats")
+fetch("/preivouschats")
   .then((res) => res.json())
   .then((data) => {
     for (const chatObject of data.previouschats) {
@@ -22,7 +22,7 @@ fetch("/getpreivouschats")
     }
   });
 
-fetch("/getuserList")
+fetch("/userList")
   .then((res) => res.json())
   .then((data) => {
     console.log(data);

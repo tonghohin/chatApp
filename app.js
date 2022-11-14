@@ -18,6 +18,14 @@ server.listen(process.env.PORT || 3000, () => {
   console.log("SERVER LISTENING!");
 });
 
+app.set("view engine", "ejs");
+app.use(express.static(__dirname));
+app.use(sessionMiddleware);
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Connect to MySQL database
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
@@ -47,14 +55,6 @@ connection.connect((err) => {
     console.log("DATABASE RESULT", result);
   });
 });
-
-app.set("view engine", "ejs");
-app.use(express.static(__dirname));
-app.use(sessionMiddleware);
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(passport.initialize());
-app.use(passport.session());
 
 const CURRENT_USERS = [];
 
@@ -110,11 +110,11 @@ app.get("/", loggedIn, (req, res) => {
   res.render("index", { username: getUserName(req.session.passport.user), userlist: CURRENT_USERS });
 });
 
-app.get("/getuserList", (req, res) => {
+app.get("/userList", (req, res) => {
   res.json({ username: getUserName(req.session.passport.user), userlist: CURRENT_USERS });
 });
 
-app.get("/getpreivouschats", (req, res) => {
+app.get("/preivouschats", (req, res) => {
   console.log("fetchs");
   connection.query("SELECT ca.chat, ca.user_id, ca.timestamp, u.username FROM chat_archive ca JOIN users u ON ca.user_id = u.user_id ORDER BY ca.timestamp", (err, result) => {
     if (err) {
