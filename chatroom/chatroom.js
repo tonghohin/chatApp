@@ -48,7 +48,7 @@ listIcon.addEventListener("click", (e) => {
   userlist.classList.toggle("appear");
 
   if (userlist.classList.contains("appear")) {
-    fetch("/getuserList")
+    fetch("/userList")
       .then((res) => res.json())
       .then((data) => {
         userlist.innerHTML = `
