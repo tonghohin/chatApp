@@ -50,7 +50,7 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    return console.error("Error: ", err.message);
+    return console.error("SQL ConnectionError: ", err.message);
   }
   console.log("CONNECTED TO MYSQL SERVER");
   connection.query("SELECT * FROM users", (err, result) => {
