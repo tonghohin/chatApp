@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
@@ -21,8 +22,9 @@ server.listen(process.env.PORT || 3000, () => {
 app.set("view engine", "ejs");
 app.use(express.static(__dirname));
 app.use(sessionMiddleware);
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -48,7 +50,7 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    return console.error("Error: ", err.message);
+    return console.error("SQL ConnectionError: ", err.message);
   }
   console.log("CONNECTED TO MYSQL SERVER");
   connection.query("SELECT * FROM users", (err, result) => {
