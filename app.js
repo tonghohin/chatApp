@@ -29,13 +29,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Connect database
-const connection = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  charset: "utf8mb4"
-});
+// const connection = mysql.createConnection({
+//   host: process.env.MYSQL_HOST,
+//   user: process.env.MYSQL_USER,
+//   password: process.env.MYSQL_PASSWORD,
+//   database: process.env.MYSQL_DATABASE,
+//   charset: "utf8mb4"
+// });
+const connection = mysql.createConnection(process.env.DATABASE_URL);
 
 connection.connect((err) => {
   if (err) {
