@@ -1,6 +1,6 @@
 # Real-time Chat Application
 
-This is a chat application powered by Socket.io, Express and MySQL.
+This is a chat application powered by Socket.io, Express and MySQL. See it in action: https://secretchat.onrender.com
 
 ## Features
 
@@ -31,10 +31,6 @@ This is a chat application powered by Socket.io, Express and MySQL.
 ### Chatroom
 
 ![Alt text](/demo/chatroom.png?raw=true "Optional Title")
-
-## See it in action!
-
-https://secretchat.onrender.com
 
 ## Contact
 
