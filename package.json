@@ -2,7 +2,7 @@
   "name": "chatapp",
   "version": "1.0.0",
   "description": "",
-  "main": "./api/app.js",
+  "main": "app.js",
   "scripts": {},
   "keywords": [],
   "author": "",
