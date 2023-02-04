@@ -18,7 +18,7 @@
         <% if (!accountCreated) { %>
         <form class="loginFormStyle" id="createAccountForm" action="/create" method="POST">
           <input type="text" name="createUsername" id="createUsername" class="loginInput" autofocus required placeholder="Create username" />
-          <input type="text" name="createPassword" id="createPassword" class="loginInput" required placeholder="Create password" />
+          <input type="password" name="createPassword" id="createPassword" class="loginInput" required placeholder="Create password" />
           <% if (error) { %>
           <p id="usernameTaken">The username has been taken. Please choose another one.</p>
           <% } %>
