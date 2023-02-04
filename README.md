@@ -22,17 +22,13 @@ See it in action at https://secretchat.onrender.com
 
 ## Demo
 
-### Login Page
+### Register Account
 
-![Alt text](/demo/login.png?raw=true "Optional Title")
-
-### Register Page
-
-![Alt text](/demo/register.png?raw=true "Optional Title")
+![Alt text](/demo/register.gif)
 
 ### Chatroom
 
-![Alt text](/demo/chatroom.png?raw=true "Optional Title")
+![Alt text](/demo/chat.gif)
 
 ## Contact
 
