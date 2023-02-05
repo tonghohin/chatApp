@@ -28,7 +28,7 @@ See it in action at https://secretchat.onrender.com
 
 ### Chatroom
 
-![Alt text](/demo/chat.mov)
+![Alt text](/demo/chat.gif)
 
 ## Contact
 
