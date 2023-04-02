@@ -22,14 +22,17 @@ See it in action at https://secretchat.onrender.com
 
 ## Demo
 
-### Register Account
+### Login Page
 
-https://user-images.githubusercontent.com/103472449/216800187-a678ef53-3ba7-4c8a-acc4-319752d67813.mov
+![Alt text](/demo/login.png?raw=true "Optional Title")
 
+### Register Page
+
+![Alt text](/demo/register.png?raw=true "Optional Title")
 
 ### Chatroom
 
-https://user-images.githubusercontent.com/103472449/216800065-0a311c25-8cbf-40ca-b238-b1b9041a5a2d.mov
+![Alt text](/demo/chatroom.png?raw=true "Optional Title")
 
 ## Contact
 
