@@ -16,6 +16,7 @@ See it in action at https://secretchat.onrender.com
 - HTML
 - CSS
 - JavaScript
+- EJS
 - Express
 - Socket.io
 - MySQL
